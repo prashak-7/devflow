@@ -1,6 +1,11 @@
-import { Inter, Space_Grotesk as SpaceGrotesk } from "next/font/google";
+import { Inter, Space_Grotesk as SpaceGrotesk, Geist } from "next/font/google";
 import type { Metadata } from "next";
 import "./globals.css";
+import ThemeProvider from "@/context/Theme";
+import { cn } from "@/lib/utils";
+import Navbar from "@/components/navigation/navbar";
+
+const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
 const inter = Inter({
   variable: "--font-inter",
@@ -29,9 +34,27 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${spaceGrotesk.variable} h-full antialiased`}
+      suppressHydrationWarning
+      className={cn(
+        "h-full",
+        "antialiased",
+        inter.variable,
+        spaceGrotesk.variable,
+        "font-sans",
+        geist.variable,
+      )}
     >
-      <body className="flex min-h-full flex-col">{children}</body>
+      <body className="flex min-h-full flex-col">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Navbar />
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
